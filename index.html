@@ -85,6 +85,43 @@ nav {
 }
 .nav-links a:hover { color: var(--accent); }
 
+/* ── SPLIT PILL BUTTON ── */
+.btn-split {
+  display: inline-flex; align-items: center;
+  text-decoration: none; height: 52px; gap: 6px;
+  position: relative;
+}
+.btn-split-label {
+  height: 52px; padding: 0 32px;
+  border-radius: 100px;
+  border: 1px solid rgba(240,235,248,0.3);
+  background: transparent; color: var(--text);
+  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  display: flex; align-items: center; white-space: nowrap;
+  transition: color .35s, border-color .35s, background .35s, transform .45s cubic-bezier(.34,1.56,.64,1);
+  will-change: transform;
+}
+.btn-split-arrow {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: transparent; color: var(--text);
+  border: 1px solid rgba(240,235,248,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+  transition: background .35s, color .35s, border-color .35s, transform .45s cubic-bezier(.34,1.56,.64,1);
+  will-change: transform;
+}
+/* Hover: both solid filled */
+.btn-split:hover .btn-split-label {
+  background: var(--accent);
+  color: #09080f;
+  border-color: var(--accent);
+}
+.btn-split:hover .btn-split-arrow {
+  background: var(--accent);
+  color: #09080f;
+  border-color: var(--accent);
+}
+
 /* ── BUTTONS ── */
 .btn-accent {
   display: inline-flex; align-items: center; gap: 8px;
@@ -413,21 +450,30 @@ footer {
 .footer-email:hover { color: var(--accent); }
 .footer-copy { font-size: 9px; color: var(--muted2); letter-spacing: 1px; font-family: var(--font-mono); }
 
-.nav-name {
+/* ── MOBILE NAV IDENTITY PILL ── */
+.nav-identity {
   display: none;
-  flex-direction: column;
+  align-items: center; gap: 10px;
+  height: 44px; padding: 0 12px 0 8px;
+  background: rgba(9,8,15,.9);
+  border: 1px solid rgba(192,132,252,.2);
+  border-radius: 100px;
+  flex-shrink: 0;
+  transition: border-color .2s, background .2s;
+}
+.nav-identity.open {
+  border-color: rgba(192,132,252,.5);
+  background: rgba(192,132,252,.1);
+}
+.nav-hire-mobile {
+  display: none;
   align-items: center;
-  gap: 2px;
-  font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
-  color: var(--text);
-  line-height: 1;
-  margin-left: 8px;
+  background: var(--accent); color: #09080f;
+  height: 36px; padding: 0 18px; border-radius: 100px;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  text-decoration: none; transition: background .2s;
 }
-.nav-title {
-  font-size: 9px; font-weight: 400;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: var(--accent);
-}
+.nav-hire-mobile:hover { background: var(--accent2); }
 .nav-logo .logo-mark,
 .nav-logo .logo-close {
   transition: opacity .2s, transform .2s;
@@ -446,64 +492,60 @@ footer {
 
 /* ── MOBILE MENU ── */
 #mobileMenu {
-  display: none;
+  display: flex;
   flex-direction: column;
-  position: fixed; top: 74px; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 70px; left: 16px;
   z-index: 490;
   background: rgba(9,8,15,.96); backdrop-filter: blur(24px);
   border: 1px solid var(--border2);
-  border-radius: 20px; padding: 8px;
+  border-radius: 20px; padding: 0;
   min-width: 200px;
   box-shadow: 0 16px 48px rgba(0,0,0,.6);
-  animation: menuSlide .25s cubic-bezier(.34,1.56,.64,1);
+  /* Collapsed by default */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(.97);
+  transition: max-height .35s cubic-bezier(.34,1.56,.64,1),
+              opacity .25s ease,
+              transform .35s cubic-bezier(.34,1.56,.64,1),
+              padding .3s ease;
 }
-#mobileMenu.open { display: flex; }
+#mobileMenu.open {
+  max-height: 300px;
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+  padding: 8px;
+}
 #mobileMenu a {
   color: var(--muted); text-decoration: none;
   font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
   padding: 14px 20px; border-radius: 12px;
   transition: background .15s, color .15s;
-  text-align: center;
+  text-align: left;
 }
 #mobileMenu a:hover { background: var(--accent-soft); color: var(--accent); }
-@keyframes menuSlide {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(.96); }
-  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-}
-
-@media (max-width: 960px) {
-  #mobileMenu {
-    left: 16px;
-    transform: none;
-  }
-  #mobileMenu a { text-align: left; }
-  @keyframes menuSlide {
-    0%   { opacity: 0; transform: translateY(-8px) scale(.96); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-  }
-}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 960px) {
   nav {
-    top: 12px;
-    left: 16px;
-    right: 16px;
+    top: 12px; left: 16px; right: 16px;
     transform: none;
     width: calc(100% - 32px);
     justify-content: space-between;
+    background: transparent;
+    border: none; box-shadow: none;
+    backdrop-filter: none;
+    padding: 0; height: auto;
+    pointer-events: none;
   }
-  #navLeft { display: none; }
-  #navRight li { display: none; }
-  #navContact { display: flex !important; }
-  #navContact a {
-    background: var(--accent); color: #09080f;
-    padding: 0 18px; border-radius: 100px;
-    font-weight: 600; letter-spacing: 1.5px;
-    height: 36px; display: flex; align-items: center;
-  }
-  #navContact a:hover { background: var(--accent2); color: #09080f; }
-  .nav-name { display: flex; }
+  nav > * { pointer-events: all; }
+  #navLeft, #navRight { display: none; }
+  .nav-logo { display: none; }
+  .nav-identity { display: flex; }
+  .nav-hire-mobile { display: flex; }
   .hero { grid-template-columns: 1fr; }
   .hero-left { padding: 100px 28px 48px; }
   .hero-right { height: 280px; }
@@ -533,8 +575,8 @@ footer {
 <!-- NAV -->
 <nav id="mainNav">
   <ul class="nav-links" id="navLeft">
-    <li><a href="#about" onclick="closeMenu()">About</a></li>
-    <li><a href="#works" onclick="closeMenu()">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Work</a></li>
   </ul>
   <a href="#" class="nav-logo" id="navLogo" onclick="toggleMenu(event)">
     <svg class="logo-mark" width="20" height="20" viewBox="10 10 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -542,15 +584,33 @@ footer {
       <rect x="10" y="10" width="52" height="20" rx="6" fill="#09090F"/>
       <rect x="40" y="40" width="22" height="22" rx="6" fill="#09090F"/>
     </svg>
-    <svg class="logo-close" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <svg class="logo-close" width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:none;">
       <path d="M1 1L13 13M13 1L1 13" stroke="#09090F" stroke-width="2" stroke-linecap="round"/>
     </svg>
   </a>
-  <span class="nav-name">Lei Marie<span class="nav-title">UI/UX Designer</span></span>
+
+  <!-- Mobile only: identity pill -->
+  <div class="nav-identity" id="navIdentity" onclick="toggleMenu(event)" style="cursor:pointer;">
+    <div style="width:30px;height:30px;border-radius:50%;background:#9333EA;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;">
+      <svg class="logo-mark" width="16" height="16" viewBox="10 10 52 52" fill="none">
+        <rect x="10" y="10" width="20" height="52" rx="6" fill="#09090F"/>
+        <rect x="10" y="10" width="52" height="20" rx="6" fill="#09090F"/>
+        <rect x="40" y="40" width="22" height="22" rx="6" fill="#09090F"/>
+      </svg>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <span style="font-size:12px;font-weight:600;color:#f0ebf8;line-height:1;letter-spacing:0.3px;">Lei Marie</span>
+      <span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#c084fc;line-height:1;">UI/UX Designer</span>
+    </div>
+  </div>
+
   <ul class="nav-links" id="navRight">
-    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
-    <li id="navContact"><a href="#contact" onclick="closeMenu()">Hire Me</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Hire Me</a></li>
   </ul>
+
+  <!-- Mobile only: Hire Me button -->
+  <a href="#contact" class="nav-hire-mobile">Hire Me</a>
 </nav>
 
 <!-- MOBILE MENU DROPDOWN -->
@@ -570,7 +630,10 @@ footer {
       <p class="hero-sub">I'm Lei Marie — I design interfaces that feel as powerful as they look</p>
     </div>
     <div class="hero-bottom">
-      <a href="#works" class="btn-accent">View Work ↓</a>
+      <a href="#works" class="btn-split">
+        <span class="btn-split-label">View Portfolio</span>
+        <span class="btn-split-arrow">←</span>
+      </a>
       <span class="hero-scroll">Scroll to explore</span>
     </div>
   </div>
@@ -599,7 +662,10 @@ footer {
       <div class="bullet">Designing intuitive experiences across FinTech, SaaS, and Trading platforms that users actually enjoy using.</div>
       <div class="bullet">Collaborating closely with clients and engineers — speaking both design and code fluently.</div>
     </div>
-    <a href="#contact" class="btn-outline">Book a Call</a>
+    <a href="#contact" class="btn-split" style="margin-top:32px;">
+      <span class="btn-split-label">Book a Call</span>
+      <span class="btn-split-arrow">←</span>
+    </a>
   </div>
   <div class="about-right fade" style="transition-delay:.12s">
     <div class="ai-badge">
@@ -712,7 +778,10 @@ footer {
     <div class="body-copy" style="max-width:320px;">
       <p>Years of crafting digital products across FinTech, SaaS, and Trading — collaborating with teams to turn complex challenges into real, elegant experiences.</p>
     </div>
-    <a href="#contact" class="btn-outline" style="margin-top:28px;">Book a Call</a>
+    <a href="#contact" class="btn-split" style="margin-top:28px;">
+      <span class="btn-split-label">Book a Call</span>
+      <span class="btn-split-arrow">←</span>
+    </a>
   </div>
   <div class="exp-right fade" style="transition-delay:.12s">
     <div>
@@ -773,7 +842,10 @@ footer {
     <p class="cta-eyebrow">Limited availability · Open to work</p>
     <h2 class="cta-title">Got a Vision?<br><em>Let's Build It.</em></h2>
     <p class="cta-sub">I'm always excited to collaborate on new and interesting projects — startup or enterprise, let's talk.</p>
-    <a href="#contact" class="btn-accent">Book a Free Call ↗</a>
+    <a href="#contact" class="btn-split">
+      <span class="btn-split-label">Book a Free Call</span>
+      <span class="btn-split-arrow">←</span>
+    </a>
   </div>
 </div>
 
@@ -845,7 +917,10 @@ footer {
   <h2 class="section-title" style="text-align:center;">Got a Vision?<br><em>Let's Build It.</em></h2>
   <p class="contact-sub">Open to new projects — startup or enterprise. I'm looking forward to working with you.</p>
   <div class="contact-actions">
-    <a href="/cdn-cgi/l/email-protection#1960766c6b597c74787075377a7674" class="btn-accent">Book a Call ↗</a>
+    <a href="/cdn-cgi/l/email-protection#0f76607a7d4f6a626e6663216c6062" class="btn-split">
+      <span class="btn-split-label">Book a Call</span>
+      <span class="btn-split-arrow">←</span>
+    </a>
     <a href="/cdn-cgi/l/email-protection#f881978d8ab89d95999194d69b9795" class="btn-ghost"><span class="__cf_email__" data-cfemail="9fe6f0eaeddffaf2fef6f3b1fcf0f2">[email&#160;protected]</span></a>
   </div>
 </section>
@@ -863,7 +938,7 @@ footer {
   <span class="footer-copy">© 2026 Lei Marie</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Cursor
   const cur = document.getElementById('cur');
   const ring = document.getElementById('ring');
@@ -912,29 +987,59 @@ footer {
   setInterval(() => goTo(cur2 + 1), 5500);
 
   // Active nav highlight
-  // Mobile nav toggle
+  // Split button — precise swap animation
+  document.querySelectorAll('.btn-split').forEach(btn => {
+    const label = btn.querySelector('.btn-split-label');
+    const arrow = btn.querySelector('.btn-split-arrow');
+
+    btn.addEventListener('mouseenter', () => {
+      // Measure actual positions
+      const btnRect   = btn.getBoundingClientRect();
+      const labelRect = label.getBoundingClientRect();
+      const arrowRect = arrow.getBoundingClientRect();
+
+      // How far label must move right = arrow width + gap
+      const labelShift = arrowRect.width + 6;
+      // How far arrow must move left = label width + gap
+      const arrowShift = -(labelRect.width + 6);
+
+      label.style.transform = `translateX(${labelShift}px)`;
+      arrow.style.transform = `translateX(${arrowShift}px) rotate(180deg)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      label.style.transform = 'translateX(0)';
+      arrow.style.transform = 'translateX(0) rotate(0deg)';
+    });
+  });
   function toggleMenu(e) {
     e.preventDefault();
     const logo = document.getElementById('navLogo');
+    const identity = document.getElementById('navIdentity');
     const menu = document.getElementById('mobileMenu');
     const isOpen = menu.classList.contains('open');
     if (isOpen) {
       menu.classList.remove('open');
-      logo.classList.remove('open');
+      logo && logo.classList.remove('open');
+      identity && identity.classList.remove('open');
     } else {
       menu.classList.add('open');
-      logo.classList.add('open');
+      logo && logo.classList.add('open');
+      identity && identity.classList.add('open');
     }
   }
   function closeMenu() {
     document.getElementById('mobileMenu').classList.remove('open');
-    document.getElementById('navLogo').classList.remove('open');
+    const logo = document.getElementById('navLogo');
+    const identity = document.getElementById('navIdentity');
+    logo && logo.classList.remove('open');
+    identity && identity.classList.remove('open');
   }
-  // Close menu when clicking outside
   document.addEventListener('click', function(e) {
     const menu = document.getElementById('mobileMenu');
     const logo = document.getElementById('navLogo');
-    if (!menu.contains(e.target) && !logo.contains(e.target)) {
+    const identity = document.getElementById('navIdentity');
+    if (!menu.contains(e.target) && !logo.contains(e.target) && !identity.contains(e.target)) {
       closeMenu();
     }
   });
