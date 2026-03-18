@@ -413,10 +413,97 @@ footer {
 .footer-email:hover { color: var(--accent); }
 .footer-copy { font-size: 9px; color: var(--muted2); letter-spacing: 1px; font-family: var(--font-mono); }
 
+.nav-name {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+  color: var(--text);
+  line-height: 1;
+  margin-left: 8px;
+}
+.nav-title {
+  font-size: 9px; font-weight: 400;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent);
+}
+.nav-logo .logo-mark,
+.nav-logo .logo-close {
+  transition: opacity .2s, transform .2s;
+}
+.nav-logo.open .logo-mark  { display: none !important; }
+.nav-logo.open .logo-close { display: block !important; }
+.nav-logo.open {
+  background: var(--accent2) !important;
+  animation: logoPop .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes logoPop {
+  0%   { transform: scale(1) rotate(0deg); }
+  40%  { transform: scale(1.25) rotate(-15deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* ── MOBILE MENU ── */
+#mobileMenu {
+  display: none;
+  flex-direction: column;
+  position: fixed; top: 74px; left: 50%; transform: translateX(-50%);
+  z-index: 490;
+  background: rgba(9,8,15,.96); backdrop-filter: blur(24px);
+  border: 1px solid var(--border2);
+  border-radius: 20px; padding: 8px;
+  min-width: 200px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.6);
+  animation: menuSlide .25s cubic-bezier(.34,1.56,.64,1);
+}
+#mobileMenu.open { display: flex; }
+#mobileMenu a {
+  color: var(--muted); text-decoration: none;
+  font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px 20px; border-radius: 12px;
+  transition: background .15s, color .15s;
+  text-align: center;
+}
+#mobileMenu a:hover { background: var(--accent-soft); color: var(--accent); }
+@keyframes menuSlide {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(.96); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+@media (max-width: 960px) {
+  #mobileMenu {
+    left: 16px;
+    transform: none;
+  }
+  #mobileMenu a { text-align: left; }
+  @keyframes menuSlide {
+    0%   { opacity: 0; transform: translateY(-8px) scale(.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 960px) {
-  nav { top: 12px; }
-  .nav-links li:nth-child(n+3) { display: none; }
+  nav {
+    top: 12px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: calc(100% - 32px);
+    justify-content: space-between;
+  }
+  #navLeft { display: none; }
+  #navRight li { display: none; }
+  #navContact { display: flex !important; }
+  #navContact a {
+    background: var(--accent); color: #09080f;
+    padding: 0 18px; border-radius: 100px;
+    font-weight: 600; letter-spacing: 1.5px;
+    height: 36px; display: flex; align-items: center;
+  }
+  #navContact a:hover { background: var(--accent2); color: #09080f; }
+  .nav-name { display: flex; }
   .hero { grid-template-columns: 1fr; }
   .hero-left { padding: 100px 28px 48px; }
   .hero-right { height: 280px; }
@@ -444,23 +531,35 @@ footer {
 <div class="cursor-ring" id="ring"></div>
 
 <!-- NAV -->
-<nav>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#works">Work</a></li>
+<nav id="mainNav">
+  <ul class="nav-links" id="navLeft">
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#works" onclick="closeMenu()">Work</a></li>
   </ul>
-  <a href="#" class="nav-logo">
-    <svg width="20" height="20" viewBox="10 10 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <a href="#" class="nav-logo" id="navLogo" onclick="toggleMenu(event)">
+    <svg class="logo-mark" width="20" height="20" viewBox="10 10 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="10" width="20" height="52" rx="6" fill="#09090F"/>
       <rect x="10" y="10" width="52" height="20" rx="6" fill="#09090F"/>
       <rect x="40" y="40" width="22" height="22" rx="6" fill="#09090F"/>
     </svg>
+    <svg class="logo-close" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+      <path d="M1 1L13 13M13 1L1 13" stroke="#09090F" stroke-width="2" stroke-linecap="round"/>
+    </svg>
   </a>
-  <ul class="nav-links">
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#contact">Contact</a></li>
+  <span class="nav-name">Lei Marie<span class="nav-title">UI/UX Designer</span></span>
+  <ul class="nav-links" id="navRight">
+    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+    <li id="navContact"><a href="#contact" onclick="closeMenu()">Hire Me</a></li>
   </ul>
 </nav>
+
+<!-- MOBILE MENU DROPDOWN -->
+<div id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#works" onclick="closeMenu()">Work</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="#contact" onclick="closeMenu()">Hire Me</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -758,7 +857,7 @@ footer {
     <li><a href="#works">Work</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#testimonials">Testimonials</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact">Hire Me</a></li>
   </ul>
   <a href="/cdn-cgi/l/email-protection#ed9482989fad88808c8481c38e8280" class="footer-email"><span class="__cf_email__" data-cfemail="4b32243e390b2e262a222765282426">[email&#160;protected]</span></a>
   <span class="footer-copy">© 2026 Lei Marie</span>
@@ -813,3 +912,32 @@ footer {
   setInterval(() => goTo(cur2 + 1), 5500);
 
   // Active nav highlight
+  // Mobile nav toggle
+  function toggleMenu(e) {
+    e.preventDefault();
+    const logo = document.getElementById('navLogo');
+    const menu = document.getElementById('mobileMenu');
+    const isOpen = menu.classList.contains('open');
+    if (isOpen) {
+      menu.classList.remove('open');
+      logo.classList.remove('open');
+    } else {
+      menu.classList.add('open');
+      logo.classList.add('open');
+    }
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('navLogo').classList.remove('open');
+  }
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('mobileMenu');
+    const logo = document.getElementById('navLogo');
+    if (!menu.contains(e.target) && !logo.contains(e.target)) {
+      closeMenu();
+    }
+  });
+</script>
+</body>
+</html>
